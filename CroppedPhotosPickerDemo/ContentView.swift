@@ -8,12 +8,26 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State private var selection: UIImage?
+    let croppingOptions = CroppedPhotosPickerOptions(doneButtonTitle: "Select",
+                                                     doneButtonColor: .orange)
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            if let selection {
+                Image(uiImage: selection)
+                    .resizable()
+                    .scaledToFit()
+            }
+            
+            CroppedPhotosPicker(style: .default, options: croppingOptions, selection: $selection) { rect in
+                print("Did crop to rect: \(rect)")
+            } didCancel: {
+                print("Did cancel")
+            } label: {
+                Text("Pick and crop image")
+            }
         }
         .padding()
     }
